@@ -22,7 +22,7 @@
       },
       "require": {
           "silverstripe/framework": "~4.0",
-          "silvercommerce/shoppingcart": "~1.0",
+          "silvercommerce/shoppingcart": "~1.0"
       },
       "require-dev": {
         "silvercommerce/catalogue-admin": "^1.0",
