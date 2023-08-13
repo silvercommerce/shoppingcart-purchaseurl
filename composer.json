@@ -1,0 +1,51 @@
+{
+    "name": "silvercommerce/shoppingcart-purchaseurl",
+    "description": "Add a unique and secure purchase URL for shopping carts that can be shared with users",
+      "type": "silverstripe-vendormodule",
+      "homepage": "http://github.com/silvercommerce/shoppingcart-purchaseurl",
+      "keywords": [
+          "silverstripe",
+          "silvercommerce",
+          "commerce",
+          "ecommerce",
+          "shoppingcart"
+      ],
+      "license": "BSD-3-Clause",
+      "authors": [
+          {
+              "name": "Morven Lewis-Everley",
+              "email": "morven@ilateral.co.uk"
+          }
+      ],
+      "support": {
+          "issues": "http://github.com/silvercommerce/shoppingcart-purchaseurl/issues"
+      },
+      "require": {
+          "silverstripe/framework": "~4.0",
+          "silvercommerce/shoppingcart": "~1.0",
+      },
+      "require-dev": {
+        "silvercommerce/catalogue-admin": "^1.0",
+        "silvercommerce/tax-admin": "^1.0",
+        "phpunit/phpunit": "^5.7",
+        "squizlabs/php_codesniffer": "^3.0"
+      },
+      "extra": {
+          "expose": [
+              "client/dist"
+          ]
+      },
+      "autoload": {
+          "psr-4": {
+              "SilverCommerce\\ShoppingCart\\PurchaseURL": "src/",
+              "SilverCommerce\\ShoppingCart\\PurchaseURL\\Tests\\": "tests/"
+          }
+      },
+      "scripts": {
+          "lint": "vendor/bin/phpcs src/ tests/",
+          "lint-clean": "vendor/bin/phpcbf src/ tests/"
+      },
+      "minimum-stability": "dev",
+      "prefer-stable": true
+  }
+  
