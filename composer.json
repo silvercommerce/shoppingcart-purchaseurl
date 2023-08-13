@@ -37,7 +37,7 @@
       },
       "autoload": {
           "psr-4": {
-              "SilverCommerce\\ShoppingCart\\PurchaseURL": "src/",
+              "SilverCommerce\\ShoppingCart\\PurchaseURL\\": "src/",
               "SilverCommerce\\ShoppingCart\\PurchaseURL\\Tests\\": "tests/"
           }
       },
