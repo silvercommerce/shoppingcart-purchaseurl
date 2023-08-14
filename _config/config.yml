@@ -1,0 +1,10 @@
+---
+Name: purchaseurlconfig
+---
+SilverCommerce\ShoppingCart\Control\ShoppingCart:
+  extensions:
+    - SilverCommerce\ShoppingCart\PurchaseURL\ShoppingCartControllerExtension
+  
+SilverCommerce\ShoppingCart\Model\ShoppingCart:
+  extensions:
+    - SilverCommerce\ShoppingCart\PurchaseURL\ShoppingCartModelExtension
