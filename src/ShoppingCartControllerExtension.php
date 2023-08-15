@@ -66,11 +66,18 @@ class ShoppingCartControllerExtension extends Extension
             $contact = $member->Contact();
         }
 
+        // If this order is assigned to a member and current
+        // user is not logged in, require login
+        if (empty($contact) && $customer->ID > 0) {
+            return Security::permissionFailure();
+        }
+
+        // If the current user is not assigned
         if (!empty($contact)
             && $customer->ID > 0
             && $customer->ID != $contact->ID
         ) {
-            return Security::permissionFailure();
+            return $owner->httpError(403);
         }
 
         // Finally, assign the order and redirect
@@ -79,5 +86,5 @@ class ShoppingCartControllerExtension extends Extension
             ->write();
 
         return $owner->redirect($owner->Link());
-    }#
+    }
 }
