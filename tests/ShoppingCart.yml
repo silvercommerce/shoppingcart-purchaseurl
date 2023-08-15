@@ -1,25 +1,25 @@
-SilverCommerce\ContactAdmin\Modeḷ\Contact:
-  testcontact:
-    FirstName: Test
-    Surname: Contact
-  testcontact2:
-    FirstName: Another Test
-    Surname: Contact
-
 SilverStripe\Security\Member:
   testuser:
     Email: test@silvercommerce.org
-    Contact: =>SilverCommerce\ContactAdmin\Modeḷ\Contact.testcontact
   testuser2:
     Email: test2@silvercommerce.org
-    Contact: =>SilverCommerce\ContactAdmin\Modeḷ\Contact.testcontact2
+
+SilverCommerce\ContactAdmin\Model\Contact:
+  testcontact:
+    FirstName: Test
+    Surname: Contact
+    Member: =>SilverStripe\Security\Member.testuser
+  testcontact2:
+    FirstName: Another Test
+    Surname: Contact
+    Member: =>SilverStripe\Security\Member.testuser2
 
 SilverCommerce\ShoppingCart\Model\ShoppingCart:
   test1:
     AccessKey: "abc123"
   test2:
     AccessKey: "333555"
-    Contact: =>SilverCommerce\ContactAdmin\Modeḷ\Contact.testcontact
+    Customer: =>SilverCommerce\ContactAdmin\Model\Contact.testcontact
   test3:
     AccessKey: "669955"
-    Contact: =>SilverCommerce\ContactAdmin\Modeḷ\Contact.testcontact2
+    Customer: =>SilverCommerce\ContactAdmin\Model\Contact.testcontact2
