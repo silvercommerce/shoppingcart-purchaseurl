@@ -48,7 +48,7 @@ class ShoppingCartControllerTest extends FunctionalTest
         $this->assertEquals(200, $result->getStatusCode());
     }
 
-    public function testActivateMember() 
+    public function testActivateMember()
     {
         $member = $this->objFromFixture(Member::class, 'testuser');
         $this->logInAs($member);
