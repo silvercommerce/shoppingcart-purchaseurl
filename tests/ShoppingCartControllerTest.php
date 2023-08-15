@@ -6,6 +6,7 @@ use SilverStripe\Security\Member;
 use SilverStripe\Control\Controller;
 use SilverStripe\Dev\FunctionalTest;
 use SilverCommerce\ContactAdmin\Model\Contact;
+use SilverCommerce\ContactAdmin\Helpers\ContactHelper;
 use SilverCommerce\ShoppingCart\Model\ShoppingCart as ShoppingCartModel;
 use SilverCommerce\ShoppingCart\PurchaseURL\ShoppingCartControllerExtension;
 use SilverCommerce\ShoppingCart\Control\ShoppingCart as ShoppingCartController;
@@ -16,6 +17,7 @@ class ShoppingCartControllerTest extends FunctionalTest
 
     public function setUp(): void
     {
+        ContactHelper::config()->set('auto_sync', false);
         parent::setUp();
     }
 
@@ -30,7 +32,7 @@ class ShoppingCartControllerTest extends FunctionalTest
             'test1'
         );
         $link = Controller::join_links(
-            $cart->AbsoluteLink(ShoppingCartController::ACTION_ACTIVATE),
+            $cart->AbsoluteLink(ShoppingCartControllerExtension::ACTION_ACTIVATE),
             $cart->UuidSegment(),
             $cart->AccessKey
         );
@@ -38,7 +40,7 @@ class ShoppingCartControllerTest extends FunctionalTest
         $this->assertEquals($link, $cart->PurchaseLink());
 
         $result = $this
-            ->get($cart->Link(ShoppingCartController::ACTION_ACTIVATE));
+            ->get($cart->Link(ShoppingCartControllerExtension::ACTION_ACTIVATE));
 
         // If no key/UUID provided
         $this->assertEquals(404, $result->getStatusCode());
@@ -50,11 +52,19 @@ class ShoppingCartControllerTest extends FunctionalTest
 
     public function testActivateMember()
     {
-        $member = $this->objFromFixture(Member::class, 'testuser');
+        $member = $this->objFromFixture(
+            Member::class,
+            'testuser'
+        );
         $this->logInAs($member);
 
+        $cart = $this->objFromFixture(
+            ShoppingCartModel::class,
+            'test1'
+        );
+
         $link = Controller::join_links(
-            $cart->Link(ShoppingCartController::ACTION_ACTIVATE),
+            $cart->Link(ShoppingCartControllerExtension::ACTION_ACTIVATE),
             $cart->UuidSegment(),
             $cart->AccessKey
         );
@@ -69,21 +79,32 @@ class ShoppingCartControllerTest extends FunctionalTest
             ShoppingCartModel::class,
             'test3'
         );
-        $result = $this->get($cart->PurchaseLink());
+        $result = $this->get($link);
 
-        $this->assertExactHTMLMatchBySelector(
-            "",
+        $this->assertPartialMatchBySelector(
+            "h1",
             ["Log in"]
         );
 
         $this->assertPartialMatchBySelector(
-            "body",
-            ['<form id="MemberLoginForm_LoginForm"']
+            "",
+            ['That page is secured. Enter your credentials below and we will send you right along.']
         );
 
         // If incorrect user logged in
         $this->logInAs($member);
-        $result = $this->get($cart->PurchaseLink());
+        $cart = $this->objFromFixture(
+            ShoppingCartModel::class,
+            'test3'
+        );
+
+        $link = Controller::join_links(
+            $cart->Link(ShoppingCartControllerExtension::ACTION_ACTIVATE),
+            $cart->UuidSegment(),
+            $cart->AccessKey
+        );
+
+        $result = $this->get($link);
         $this->assertEquals(403, $result->getStatusCode());
         $this->logOut();
 
@@ -92,13 +113,16 @@ class ShoppingCartControllerTest extends FunctionalTest
             Member::class,
             'testuser2'
         );
-        $cart = $this->objFromFixture(
-            ShoppingCartModel::class,
-            'test2'
+        $contact = $this->objFromFixture(
+            Contact::class,
+            'testcontact2'
         );
+        $contact->MemberID = $member->ID;
+        $contact->write();
 
+        // Finally, correct user logged in
         $this->logInAs($member);
-        $result = $this->get($cart->PurchaseLink());
+        $result = $this->get($link);
         $this->assertEquals(200, $result->getStatusCode());
         $this->logOut();
     }
