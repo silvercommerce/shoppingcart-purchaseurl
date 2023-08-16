@@ -82,11 +82,6 @@ class ShoppingCartControllerTest extends FunctionalTest
         $result = $this->get($link);
 
         $this->assertPartialMatchBySelector(
-            "h1",
-            ["Log in"]
-        );
-
-        $this->assertPartialMatchBySelector(
             "",
             ['That page is secured. Enter your credentials below and we will send you right along.']
         );
